@@ -87,6 +87,8 @@ module AnnotateModels
     # each column. The line contains the column name,
     # the type (and length), and any optional attributes
     def get_schema_info(klass, header, options = {})
+      klass.reset_column_information
+
       info = "# #{header}\n"
       info<< "#\n"
       if(options[:format_markdown])

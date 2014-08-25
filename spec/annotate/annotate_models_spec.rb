@@ -6,11 +6,12 @@ require 'annotate/active_record_patch'
 describe AnnotateModels do
   def mock_class(table_name, primary_key, columns)
     options = {
-      :connection   => double("Conn", :indexes => []),
-      :table_name   => table_name,
-      :primary_key  => primary_key,
-      :column_names => columns.map { |col| col.name.to_s },
-      :columns      => columns
+      :connection               => double("Conn", :indexes => []),
+      :table_name               => table_name,
+      :primary_key              => primary_key,
+      :column_names             => columns.map { |col| col.name.to_s },
+      :columns                  => columns,
+      :reset_column_information => nil
     }
 
     double("An ActiveRecord class", options)
