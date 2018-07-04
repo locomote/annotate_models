@@ -197,22 +197,22 @@ module AnnotateModels
     end
 
     # Simple quoting for the default column value
-    def quote_default(value)
+    def quote(value)
       case value
-      when NilClass       then 'NULL'
-      when TrueClass      then 'TRUE'
-      when FalseClass     then 'FALSE'
-      when Float, Integer then value.to_s
+      when NilClass                 then 'NULL'
+      when TrueClass                then 'TRUE'
+      when FalseClass               then 'FALSE'
+      when Float, Integer           then value.to_s
         # BigDecimals need to be output in a non-normalized form and quoted.
-      when BigDecimal     then value.to_s('F')
-      when Array          then value.map { |v| quote(v) }
+      when BigDecimal               then value.to_s('F')
+      when Array                    then value.map { |v| quote(v) }
       else
         value.inspect
       end
     end
 
     def schema_default(klass, column)
-      quote_default(column_coder(klass, column).call(klass.column_defaults[column.name]))
+      quote(column_coder(klass, column).call(klass.column_defaults[column.name]))
     end
 
     def retrieve_indexes_from_table(klass)
