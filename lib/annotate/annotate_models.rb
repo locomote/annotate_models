@@ -187,10 +187,10 @@ module AnnotateModels
       current_patterns.map { |p| p.sub(/^[\/]*/, '') }
     end
 
-    def column_coder(column)
-      cast_type = column.cast_type
-      if cast_type.respond_to?(:coder) && cast_type.coder
-        cast_type.coder.method :dump
+    def column_coder(klass, column)
+      column_type = klass.type_for_attribute(column.name)
+      if column_type.is_a?(::ActiveRecord::Type::Serialized)
+        column_type.coder.method :dump
       else
         ->(v) { v }
       end
@@ -212,7 +212,7 @@ module AnnotateModels
     end
 
     def schema_default(klass, column)
-      quote_default(column_coder(column).call(klass.column_defaults[column.name]))
+      quote_default(column_coder(klass, column).call(klass.column_defaults[column.name]))
     end
 
     def retrieve_indexes_from_table(klass)
